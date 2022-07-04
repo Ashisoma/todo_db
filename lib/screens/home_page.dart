@@ -33,6 +33,9 @@ class _HomePageState extends State<HomePage> {
           Icons.person,
           size: 20,
         ),
+        SizedBox(
+          width: 20,
+        )
       ],
     );
   }
