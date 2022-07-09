@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_db/services/notifications_services.dart';
 import 'package:todo_db/services/theme_services.dart';
 
@@ -25,12 +26,30 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
-      body: Column(),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(DateFormat.yMMMMd().format(DateTime.now()))
+                  ],
+                ),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 
   _appBar() {
     return AppBar(
+      elevation: 0,
+      backgroundColor: context.theme.backgroundColor,
       leading: GestureDetector(
         onTap: () {
           THemeService().changeMyTheme();
@@ -46,14 +65,14 @@ class _HomePageState extends State<HomePage> {
           );
         },
         child: Icon(
-          Icons.nightlight_round,
+          Get.isDarkMode ? Icons.wb_sunny_outlined : Icons.nightlight_round,
           size: 20,
+          color: Get.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
       actions: [
-        Icon(
-          Icons.person,
-          size: 20,
+        CircleAvatar(
+          backgroundImage: AssetImage("images/profile.jpg"),
         ),
         SizedBox(
           width: 20,
