@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_db/screens/theme.dart';
+import 'package:todo_db/screens/widgets/button.dart';
 import 'package:todo_db/services/notifications_services.dart';
 import 'package:todo_db/services/theme_services.dart';
 
@@ -27,20 +29,31 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: _appBar(),
       body: Column(
+        children: [_addTaskBar()],
+      ),
+    );
+  }
+
+  Container _addTaskBar() {
+    return Container(
+      margin: const EdgeInsets.only(left: 20, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(DateFormat.yMMMMd().format(DateTime.now()))
-                  ],
+          Container(
+            // margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  DateFormat.yMMMMd().format(DateTime.now()),
+                  style: subHeadingStyle,
                 ),
-              )
-            ],
-          )
+                Text("Today", style: headingStyle),
+              ],
+            ),
+          ),
+          MyButton(label: "+ Add Task", onTap: () => null)
         ],
       ),
     );
