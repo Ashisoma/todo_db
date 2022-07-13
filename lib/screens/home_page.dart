@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_db/screens/add_task.dart';
 import 'package:todo_db/screens/theme.dart';
 import 'package:todo_db/screens/widgets/button.dart';
 import 'package:todo_db/services/notifications_services.dart';
@@ -17,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var notifyHelper;
-  DateTime _selectedDate =  DateTime.now();
+  DateTime _selectedDate = DateTime.now();
   @override
   void initState() {
     // TODO: implement initState
@@ -33,40 +34,41 @@ class _HomePageState extends State<HomePage> {
       appBar: _appBar(),
       body: Column(
         children: [
+          const SizedBox(
+            height: 10,
+          ),
           _addTaskBar(),
-          Container(
-            margin: const EdgeInsets.only(top: 15, left: 20),
-            child: DatePicker(
-              DateTime.now(),
-              height: 100,
-              width: 80,
-              initialSelectedDate: DateTime.now(),
-              selectionColor: primaryClr,
-              selectedTextColor: Colors.white,
-              dateTextStyle: GoogleFonts.lato(
-                textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey),
-              ),
-              dayTextStyle: GoogleFonts.lato(
-                textStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey),
-              ),
-              monthTextStyle: GoogleFonts.lato(
-                textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey),
-              ),
-              onDateChange: (date) {
-                _selectedDate = date;
-              },
-            ),
-          )
+          _dateTimeBar()
         ],
+      ),
+    );
+  }
+
+  Container _dateTimeBar() {
+    return Container(
+      margin: const EdgeInsets.only(top: 15, left: 20),
+      child: DatePicker(
+        DateTime.now(),
+        height: 100,
+        width: 80,
+        initialSelectedDate: DateTime.now(),
+        selectionColor: primaryClr,
+        selectedTextColor: Colors.white,
+        dateTextStyle: GoogleFonts.lato(
+          textStyle: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w600, color: Colors.grey),
+        ),
+        dayTextStyle: GoogleFonts.lato(
+          textStyle: const TextStyle(
+              fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey),
+        ),
+        monthTextStyle: GoogleFonts.lato(
+          textStyle: const TextStyle(
+              fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey),
+        ),
+        onDateChange: (date) {
+          _selectedDate = date;
+        },
       ),
     );
   }
@@ -90,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          MyButton(label: "+ Add Task", onTap: () => null)
+          MyButton(label: "+ Add Task", onTap: () => Get.to(AddTaskPage()))
         ],
       ),
     );
