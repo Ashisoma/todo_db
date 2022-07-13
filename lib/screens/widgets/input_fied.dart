@@ -29,7 +29,7 @@ class MyInput extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 8.0),
             height: 52,
-            padding:const EdgeInsets.only(left: 14),
+            padding: const EdgeInsets.only(left: 14),
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.grey,
@@ -39,28 +39,35 @@ class MyInput extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Expanded(child: TextFormField(
-                  autofocus: false,
-                  cursorColor: Get.isDarkMode? Colors.grey[100] : Colors.grey[700],
-                  controller: controller,
-                  style: subTitleStyle,
-                  decoration: InputDecoration(
-                    hintText: hint,
-                    hintStyle: subHeadingStyle,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: context.theme.backgroundColor,
-                        width: 0,
+                Expanded(
+                  child: TextFormField(
+                    readOnly: widget == null ? false : true,
+                    autofocus: false,
+                    cursorColor:
+                        Get.isDarkMode ? Colors.grey[100] : Colors.grey[700],
+                    controller: controller,
+                    style: subTitleStyle,
+                    decoration: InputDecoration(
+                      hintText: hint,
+                      hintStyle: subHeadingStyle,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: context.theme.backgroundColor,
+                          width: 0,
+                        ),
                       ),
-                    ),
-                    enabledBorder:  UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: context.theme.backgroundColor,
-                        width: 0,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: context.theme.backgroundColor,
+                          width: 0,
+                        ),
                       ),
                     ),
                   ),
-                ))
+                ),
+                widget == null ? Container() : Container(
+                  child: widget,
+                ),
               ],
             ),
           )
