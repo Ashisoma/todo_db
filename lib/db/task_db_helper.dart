@@ -1,3 +1,5 @@
+import 'package:todo_db/models/task.dart';
+
 class DBHelper {
   static Database? db;
 
@@ -27,5 +29,10 @@ class DBHelper {
     } catch (e) {
       print(e);
     }
+  }
+
+  static Future<int> insert(Task? task) async {
+    print("Inseting data ...");
+    return await _db?.insert(_tableName, task!.toJson())?? 1;
   }
 }

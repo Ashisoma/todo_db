@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:todo_db/db/task_db_helper.dart';
 import 'package:todo_db/models/task.dart';
 
 class TaskController extends GetxController {
@@ -9,6 +10,6 @@ class TaskController extends GetxController {
   }
 
   Future<void> addTask({Task? task}) {
-    return null;
+    return DBHelper.insert(task);
   }
 }
