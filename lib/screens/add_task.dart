@@ -317,8 +317,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
-  _addTaskToDB() {
-    _taskController.addTask(
+  _addTaskToDB() async {
+    int value = await _taskController.addTask(
         task: Task(
       note: _noteController.text,
       title: _titleController.text,
@@ -330,5 +330,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       repeat: _selectedRpt,
       isComplete: 0,
     ));
+
+    print("Task id is $value");
   }
 }

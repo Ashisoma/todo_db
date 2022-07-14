@@ -9,7 +9,7 @@ class TaskController extends GetxController {
     super.onReady();
   }
 
-  Future<void> addTask({Task? task}) {
-    return DBHelper.insert(task);
+  Future<int> addTask({Task? task}) async{
+    return await DBHelper.insert(task);
   }
 }
