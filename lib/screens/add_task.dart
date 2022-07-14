@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_db/controllers/task_controller.dart';
+import 'package:todo_db/models/task.dart';
 import 'package:todo_db/screens/theme.dart';
 import 'package:todo_db/screens/widgets/button.dart';
 import 'package:todo_db/screens/widgets/input_fied.dart';
@@ -15,6 +17,11 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+  final TaskController _taskController = Get.put(TaskController());
+
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+
   DateTime _selectedDate = DateTime.now();
   String _endTime = "09:30 AM";
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -25,7 +32,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String _selectedRpt = "None";
   List<String> _repeatedRptList = ["None", "Daily", "Weekly", "Monthly"];
 
-  int _selectedColor =0;
+  int _selectedColor = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +48,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 "Add Task",
                 style: headingStyle,
               ),
-              MyInput(title: "Title", hint: "Enter your title"),
-              MyInput(title: "Note", hint: "Enter your note"),
+              MyInput(
+                title: "Title",
+                hint: "Enter your title",
+                controller: _titleController,
+              ),
+              MyInput(
+                title: "Note",
+                hint: "Enter your note",
+                controller: _noteController,
+              ),
               MyInput(
                 title: "Date",
                 hint: DateFormat.yMd().format(_selectedDate),
@@ -122,11 +137,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 title: "Repeat",
                 hint: _selectedRpt,
                 widget: DropdownButton(
-                  items:
-                      _repeatedRptList.map<DropdownMenuItem<String>>((String? value) {
+                  items: _repeatedRptList
+                      .map<DropdownMenuItem<String>>((String? value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value!, style: TextStyle(color: Colors.grey),),
+                      child: Text(
+                        value!,
+                        style: TextStyle(color: Colors.grey),
+                      ),
                     );
                   }).toList(),
                   underline: Container(
@@ -146,14 +164,23 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   style: subTitleStyle,
                 ),
               ),
-              SizedBox(height: 18,),
+              SizedBox(
+                height: 18,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _selectedColorPallete(),
-                  MyButton(label: "Create Task", onTap: (){})
+                  MyButton(
+                      label: "Create Task",
+                      onTap: () {
+                        _validateData();
+                      }),
                 ],
+              ),
+              SizedBox(
+                height: 18,
               ),
             ],
           ),
@@ -161,8 +188,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
       ),
     );
   }
-
-
 
   _appBar() {
     return AppBar(
@@ -234,37 +259,76 @@ class _AddTaskPageState extends State<AddTaskPage> {
           hour: int.parse(_startTime.split(":")[0]),
           minute: int.parse(_startTime.split(":")[1].split(" ")[0])));
 
-  _selectedColorPallete(){
+  _selectedColorPallete() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Color", style: titleStyle,),
-        SizedBox(height: 8.0,),
+        Text(
+          "Color",
+          style: titleStyle,
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
         Wrap(
-          children: List<Widget>.generate(
-              3,
-                  (int index){
-                return GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      _selectedColor = index;
-
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left :8.0),
-                    child: CircleAvatar(
-                      radius: 14,
-                      backgroundColor: index==0? primaryClr : index==1? pinkClr: yellowClr,
-                      child: _selectedColor==index? Icon(Icons.done, size: 16,color: Colors.white,): Container(),
-                    ),
-                  ),
-                );
-              }),
-
+          children: List<Widget>.generate(3, (int index) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedColor = index;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: index == 0
+                      ? primaryClr
+                      : index == 1
+                          ? pinkClr
+                          : yellowClr,
+                  child: _selectedColor == index
+                      ? Icon(
+                          Icons.done,
+                          size: 16,
+                          color: Colors.white,
+                        )
+                      : Container(),
+                ),
+              ),
+            );
+          }),
         ),
       ],
     );
+  }
 
+  _validateData() {
+    if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
+      // save to database
+      _addTaskToDB();
+      Get.back();
+    } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
+      Get.snackbar("Required", "All fields are required",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.white,
+          colorText: pinkClr,
+          icon: Icon(Icons.warning_amber_rounded));
+    }
+  }
+
+  _addTaskToDB() {
+    _taskController.addTask(
+        task: Task(
+      note: _noteController.text,
+      title: _titleController.text,
+      date: DateFormat.yMd().format(_selectedDate),
+      startTime: _startTime,
+      endTime: _endTime,
+      color: _selectedColor,
+      remind: _selectReminder,
+      repeat: _selectedRpt,
+      isComplete: 0,
+    ));
   }
 }

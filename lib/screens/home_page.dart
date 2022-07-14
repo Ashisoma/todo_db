@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
+      backgroundColor: context.theme.backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
