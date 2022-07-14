@@ -1,7 +1,9 @@
+import 'package:sqflite/sqflite.dart';
 import 'package:todo_db/models/task.dart';
 
+
 class DBHelper {
-  static Database? db;
+  static Database? _db;
 
   static final int version = 1;
   static final String _tableName = "tasks";
@@ -11,7 +13,7 @@ class DBHelper {
       return;
     }
     try {
-      String path = await getDatabasePath() + 'tasks.db';
+      String _path = await getDatabasesPath() + 'tasks.db';
       _db =
           await openDatabase(_path, version: version, onCreate: (db, version) {
         print("Creatimg a new one");
