@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_db/controllers/task_controller.dart';
 import 'package:todo_db/screens/add_task.dart';
 import 'package:todo_db/screens/theme.dart';
 import 'package:todo_db/screens/widgets/button.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var notifyHelper;
   DateTime _selectedDate = DateTime.now();
+  final _taskController = Get.put(TaskController());
   @override
   void initState() {
     // TODO: implement initState
@@ -40,7 +42,8 @@ class _HomePageState extends State<HomePage> {
             height: 10,
           ),
           _addTaskBar(),
-          _dateTimeBar()
+          _dateTimeBar(),
+          _showTasks(),
         ],
       ),
     );
@@ -133,5 +136,22 @@ class _HomePageState extends State<HomePage> {
         )
       ],
     );
+  }
+
+  _showTasks() {
+    print(_taskController.getTask());
+    return Expanded(child: Obx(() {
+      return ListView.builder(
+          itemCount: _taskController.taskList.length,
+          itemBuilder: (_, context) {
+            print(_taskController.taskList.length);
+            return Container(
+              margin: EdgeInsets.only(bottom: 10),
+              height: 50,
+              width: 100,
+              color: Colors.green,
+            );
+          });
+    }));
   }
 }
