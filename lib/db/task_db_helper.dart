@@ -6,6 +6,7 @@ import 'package:todo_db/models/task.dart';
 class DBHelper {
   static Database? _db;
 
+// todo reruun the creation of the DBHelper
   static final int version = 1;
   static final String _tableName = "tasks";
 
@@ -20,7 +21,7 @@ class DBHelper {
         print("Creatimg a new one");
         return db
           ..execute(
-            "CREATE DATABASE $_tableName("
+            "CREATE TABLE $_tableName("
             "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             "title STRING, note TEXT, date STRING, "
             "startTime STRING, endTime STRING, "

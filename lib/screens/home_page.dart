@@ -97,7 +97,13 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          MyButton(label: "+ Add Task", onTap: () => Get.to(AddTaskPage()))
+          MyButton(
+              label: "+ Add Task",
+              onTap: () async {
+                await Get.to(AddTaskPage());
+                // page refresher
+                _taskController.getTask();
+              })
         ],
       ),
     );
@@ -140,10 +146,12 @@ class _HomePageState extends State<HomePage> {
 
   _showTasks() {
     print(_taskController.getTask());
+    // print("\n\n No of tasks : " + _taskController.taskList.length.toString());
     return Expanded(child: Obx(() {
       return ListView.builder(
           itemCount: _taskController.taskList.length,
           itemBuilder: (_, context) {
+            print("\n\n No of tasks :");
             print(_taskController.taskList.length);
             return Container(
               margin: EdgeInsets.only(bottom: 10),

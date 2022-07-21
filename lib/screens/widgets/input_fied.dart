@@ -49,7 +49,7 @@ class MyInput extends StatelessWidget {
                     style: subTitleStyle,
                     decoration: InputDecoration(
                       hintText: hint,
-                      hintStyle: subHeadingStyle,
+                      hintStyle: subTitleStyle,
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: context.theme.backgroundColor,
@@ -65,9 +65,11 @@ class MyInput extends StatelessWidget {
                     ),
                   ),
                 ),
-                widget == null ? Container() : Container(
-                  child: widget,
-                ),
+                widget == null
+                    ? Container()
+                    : Container(
+                        child: widget,
+                      ),
               ],
             ),
           )
