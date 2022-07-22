@@ -7,8 +7,10 @@ import 'package:todo_db/controllers/task_controller.dart';
 import 'package:todo_db/screens/add_task.dart';
 import 'package:todo_db/screens/theme.dart';
 import 'package:todo_db/screens/widgets/button.dart';
+import 'package:todo_db/screens/widgets/task_tile.dart';
 import 'package:todo_db/services/notifications_services.dart';
 import 'package:todo_db/services/theme_services.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -43,6 +45,9 @@ class _HomePageState extends State<HomePage> {
           ),
           _addTaskBar(),
           _dateTimeBar(),
+          const SizedBox(
+            height: 10,
+          ),
           _showTasks(),
         ],
       ),
@@ -150,15 +155,25 @@ class _HomePageState extends State<HomePage> {
     return Expanded(child: Obx(() {
       return ListView.builder(
           itemCount: _taskController.taskList.length,
-          itemBuilder: (_, context) {
+          itemBuilder: (_, index) {
             print("\n\n No of tasks :");
             print(_taskController.taskList.length);
-            return Container(
-              margin: EdgeInsets.only(bottom: 10),
-              height: 50,
-              width: 100,
-              color: Colors.green,
-            );
+            return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onDoubleTap: () {
+                            print("Tapped");
+                          },
+                          child: TaskTile(_taskController.taskList[index]),
+                        )
+                      ],
+                    ),
+                  ),
+                ));
           });
     }));
   }

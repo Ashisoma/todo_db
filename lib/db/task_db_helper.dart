@@ -44,4 +44,8 @@ class DBHelper {
     print("Getting data ... table = $_tableName \n database is  = $_db");
     return await _db!.query(_tableName);
   }
+
+  static delete(Task task) async {
+    await _db!.delete(_tableName, where: "id=?", whereArgs: [task.id]);
+  }
 }
