@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_db/controllers/task_controller.dart';
+import 'package:todo_db/models/task.dart';
 import 'package:todo_db/screens/add_task.dart';
 import 'package:todo_db/screens/theme.dart';
 import 'package:todo_db/screens/widgets/button.dart';
@@ -166,7 +167,8 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         GestureDetector(
                           onDoubleTap: () {
-                            print("Tapped");
+                            _showBottomSheet(
+                                context, _taskController.taskList[index]);
                           },
                           child: TaskTile(_taskController.taskList[index]),
                         )
@@ -176,5 +178,94 @@ class _HomePageState extends State<HomePage> {
                 ));
           });
     }));
+  }
+
+  _bottomSheetBtn(
+      {required String label,
+      required Function()? onTap,
+      required Color clr,
+      bool iClosed = false,
+      required BuildContext context}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        height: 55,
+        width: MediaQuery.of(context).size.width * 0.9,
+        decoration: BoxDecoration(
+          border: Border.all(
+              width: 2,
+              color: iClosed == true
+                  ? Get.isDarkMode
+                      ? Colors.grey[600]!
+                      : Colors.grey[300]!
+                  : clr),
+          borderRadius: BorderRadius.circular(20),
+          color: iClosed == true ? Colors.transparent : clr,
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style:
+                iClosed ? titleStyle : titleStyle.copyWith(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context, Task task) {
+    Get.bottomSheet(Container(
+      padding: const EdgeInsets.only(top: 4),
+      height: task.isComplete == 1
+          ? MediaQuery.of(context).size.height * 0.24
+          : MediaQuery.of(context).size.height * 0.32,
+      color: Get.isDarkMode ? darkGreyhClr : Colors.white,
+      child: Column(
+        children: [
+          Container(
+            height: 6,
+            width: 120,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Get.isDarkMode ? Colors.grey[600] : Colors.grey[300],
+            ),
+          ),
+          // Spacer(),
+          task.isComplete == 1
+              ? Container()
+              : _bottomSheetBtn(
+                  label: "Task Completed",
+                  onTap: () {
+                    Get.back();
+                  },
+                  clr: primaryClr,
+                  context: context),
+
+          _bottomSheetBtn(
+            label: "Delete Task",
+            onTap: () {
+              Get.back();
+            },
+            clr: Colors.red[300]!,
+            context: context,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          _bottomSheetBtn(
+              label: "Close",
+              iClosed: true,
+              onTap: () {
+                Get.back();
+              },
+              clr: Colors.white,
+              context: context),
+          const SizedBox(
+            height: 5,
+          ),
+        ],
+      ),
+    ));
   }
 }
