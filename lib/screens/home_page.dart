@@ -78,7 +78,9 @@ class _HomePageState extends State<HomePage> {
               fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey),
         ),
         onDateChange: (date) {
-          _selectedDate = date;
+          setState(() {
+            _selectedDate = date;
+          });
         },
       ),
     );
@@ -139,7 +141,7 @@ class _HomePageState extends State<HomePage> {
           color: Get.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
-      actions: [
+      actions: const [
         CircleAvatar(
           backgroundImage: AssetImage("images/profile.jpg"),
         ),
@@ -159,23 +161,46 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (_, index) {
             print("\n\n No of tasks :");
             print(_taskController.taskList.length);
-            return AnimationConfiguration.staggeredList(
-                position: index,
-                child: SlideAnimation(
-                  child: FadeInAnimation(
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(
-                                context, _taskController.taskList[index]);
-                          },
-                          child: TaskTile(_taskController.taskList[index]),
-                        )
-                      ],
+            Task task = _taskController.taskList[index];
+            print(task.toJson());
+            if (task.repeat == "Daily") {
+              return AnimationConfiguration.staggeredList(
+                  position: index,
+                  child: SlideAnimation(
+                    child: FadeInAnimation(
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ));
+                  ));
+            }
+            if (task.date == DateFormat.yMd().format(_selectedDate)) {
+              return AnimationConfiguration.staggeredList(
+                  position: index,
+                  child: SlideAnimation(
+                    child: FadeInAnimation(
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ),
+                    ),
+                  ));
+            } else {
+              return Container();
+            }
           });
     }));
   }

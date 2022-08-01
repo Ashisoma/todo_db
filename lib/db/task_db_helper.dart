@@ -25,7 +25,7 @@ class DBHelper {
             "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             "title STRING, note TEXT, date STRING, "
             "startTime STRING, endTime STRING, "
-            "reminder INTEGER, repeat STRING, "
+            "remind STRING, repeat STRING, "
             "color INTEGER,"
             "isComplete INTEGER)",
           );

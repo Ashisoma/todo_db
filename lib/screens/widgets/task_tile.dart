@@ -59,7 +59,7 @@ class TaskTile extends StatelessWidget {
                     height: 12,
                   ),
                   Text(
-                    task!.note ?? "",
+                    task!.repeat ?? "repeat note",
                     style: GoogleFonts.lato(
                       textStyle:
                           TextStyle(fontSize: 15, color: Colors.grey[200]),
@@ -96,7 +96,7 @@ _getBGClr(int no) {
       return bluishClr;
     case 1:
       return pinkClr;
-    case 3:
+    case 2:
       return yellowClr;
 
     default:
