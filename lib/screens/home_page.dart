@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       children: [
                         GestureDetector(
-                          onDoubleTap: () {
+                          onTap: () {
                             _showBottomSheet(
                                 context, _taskController.taskList[index]);
                           },
@@ -237,6 +237,7 @@ class _HomePageState extends State<HomePage> {
               : _bottomSheetBtn(
                   label: "Task Completed",
                   onTap: () {
+                    
                     Get.back();
                   },
                   clr: primaryClr,
@@ -245,6 +246,8 @@ class _HomePageState extends State<HomePage> {
           _bottomSheetBtn(
             label: "Delete Task",
             onTap: () {
+              _taskController.delete(task);
+              _taskController.getTask();
               Get.back();
             },
             clr: Colors.red[300]!,
