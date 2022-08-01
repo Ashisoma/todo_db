@@ -58,8 +58,8 @@ class NotificationServiceHelper {
   scheduledNotification(int hour, int minute, Task task) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
-        "title",
-        "body",
+        task.title,
+        task.note,
         _convetDateTime(hour, minute),
         const NotificationDetails(
             android: AndroidNotificationDetails(
@@ -69,7 +69,7 @@ class NotificationServiceHelper {
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
-            matchDateTimeComponents: DateTimeComponents.time);
+        matchDateTimeComponents: DateTimeComponents.time);
   }
 
   displayNotification({required String title, required String body}) async {
