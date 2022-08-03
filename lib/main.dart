@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:todo_db/db/task_db_helper.dart';
 import 'package:todo_db/screens/home_page.dart';
 import 'package:todo_db/screens/theme.dart';
 import 'package:todo_db/services/theme_services.dart';
@@ -8,6 +9,7 @@ import 'package:todo_db/services/theme_services.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  await DBHelper.initDB();
   runApp(const MyApp());
 }
 
