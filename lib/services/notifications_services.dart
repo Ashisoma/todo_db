@@ -4,9 +4,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:get/get.dart';
 import 'package:todo_db/models/task.dart';
-import 'package:todo_db/screens/home_page.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:todo_db/screens/notifications_page.dart';
 
 class NotificationServiceHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -39,9 +39,11 @@ class NotificationServiceHelper {
     } else {
       print("Notification Done");
     }
-    Get.to(() => Container(
-          color: Colors.white,
-        ));
+    if (payload == "Theme Changed") {
+      print("THeme changed, stay");
+    } else {
+      Get.to(() => NotificationsPage(label: payload!));
+    }
   }
 
   void requestIOSPermissions() {
@@ -57,19 +59,21 @@ class NotificationServiceHelper {
 
   scheduledNotification(int hour, int minute, Task task) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        task.title,
-        task.note,
-        _convetDateTime(hour, minute),
-        const NotificationDetails(
-            android: AndroidNotificationDetails(
-          'your channel id',
-          'your channel name', // 'your channel description'
-        )),
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.time);
+      task.id!.toInt(),
+      task.title,
+      task.note,
+      _convetDateTime(hour, minute),
+      const NotificationDetails(
+          android: AndroidNotificationDetails(
+        'your channel id',
+        'your channel name', // 'your channel description'
+      )),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+      payload: "${task.title}| +${task.note}",
+    );
   }
 
   displayNotification({required String title, required String body}) async {
@@ -87,7 +91,7 @@ class NotificationServiceHelper {
       title,
       body,
       platformChannelSpecifics,
-      payload: 'It could be anything you pass',
+      payload: title,
     );
   }
 
